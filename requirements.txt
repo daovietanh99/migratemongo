@@ -1,0 +1,8 @@
+django
+djangorestframework
+django-filters
+drf-spectacular
+drf-spectacular-sidecar
+urllib
+pymongo
+Pillow
