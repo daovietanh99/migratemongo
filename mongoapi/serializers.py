@@ -3,6 +3,7 @@ from rest_framework import serializers
 class MultilingualSerializer(serializers.Serializer):
     en = serializers.CharField(required=False)
     vi = serializers.CharField(required=False)
+    ko = serializers.CharField(required=False)
 
 class RichTextBlockSerializer(serializers.Serializer):
     content = serializers.CharField(required=False) #modified
@@ -18,11 +19,11 @@ class MetaSerializer(serializers.Serializer):
     title =  MultilingualSerializer(required=False)
     description = MultilingualSerializer(required=False)
     image = MultilingualSerializer(required=False)
-    isApproveText = serializers.BooleanField(required=False)
-    isFinalCheckOnWeb = serializers.BooleanField(required=False)
-    deploy = serializers.BooleanField(required=False)
-    isHighlight = serializers.BooleanField(required=False)
-    isApproveImage = serializers.BooleanField(required=False)
+    # isApproveText = serializers.BooleanField(required=False)
+    # isFinalCheckOnWeb = serializers.BooleanField(required=False)
+    # deploy = serializers.BooleanField(required=False)
+    # isHighlight = serializers.BooleanField(required=False)
+    # isApproveImage = serializers.BooleanField(required=False)
     
 class TimeSerializer(serializers.Serializer):
     date = serializers.CharField(required=False)

@@ -72,7 +72,7 @@
             "date": moment(parseInt(res[i]["create_at"]["$numberLong"])).toISOString()
           },
           "meta": {
-            "attributes": res[i]["attributes"],
+            // "attributes": res[i]["attributes"],
             "title": {
               "vi": res[i]['title_vi'],
               "en": res[i]['title_en'],
@@ -88,11 +88,11 @@
               "vi": res[i]["image"],
               "ko": res[i]["image"]
             },
-            "isApproveText": res[i]["isApproveText"],
-            "isFinalCheckOnWeb": res[i]["isFinalCheckOnWeb"],
-            "deploy": res[i]["deploy"],
-            "isHighlight": res[i]["isHighlight"],
-            "isApproveImage": res[i]["isApproveImage"],
+            // "isApproveText": res[i]["isApproveText"],
+            // "isFinalCheckOnWeb": res[i]["isFinalCheckOnWeb"],
+            // "deploy": res[i]["deploy"],
+            // "isHighlight": res[i]["isHighlight"],
+            // "isApproveImage": res[i]["isApproveImage"],
           },
           "slug": res[i]["code"],
           "category": "NEED TO CHANGE",

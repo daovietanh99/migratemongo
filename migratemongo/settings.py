@@ -39,8 +39,6 @@ S3_REGION = os.environ.get("S3_REGION", None)
 S3_BUCKET = os.environ.get("S3_BUCKET", None)
 S3_ENDPOINT = os.environ.get("S3_ENDPOINT", None)
 
-print(MONGO_SOURCE_URL)
-
 # Application definition
 
 INSTALLED_APPS = [
