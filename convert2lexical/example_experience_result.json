@@ -1,0 +1,184 @@
+{
+    "_id": {
+      "$oid": "665d64497dc25580f61aa727"
+    },
+    "title": {
+      "en": "Underwater Activities"
+    },
+    "banner": "664b05fe37c999bcc28ad8a9",
+    "blocks": [
+      {
+        "content": {
+          "en": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Adventure tourism in Vietnam offers visitors a variety of exciting activities, especially domestic activities. Here, visitors can enjoy unique experiences such as scuba diving, snorkeling and boating on Vietnam's beautiful waters. ",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1,
+                  "textFormat": 0
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "detail": 0,
+                          "format": 0,
+                          "mode": "normal",
+                          "style": "",
+                          "text": "Scuba diving is an activity not to be missed when coming to Vietnam, especially in beautiful spots like Hon Mun, Nha Trang and Phu Quoc. In these places, visitors can explore the underwater beauty with beautiful coral reefs and diverse marine life.",
+                          "type": "text",
+                          "version": 1
+                        }
+                      ],
+                      "direction": "ltr",
+                      "format": "",
+                      "indent": 0,
+                      "type": "listitem",
+                      "version": 1,
+                      "value": 1
+                    },
+                    {
+                      "children": [
+                        {
+                          "detail": 0,
+                          "format": 0,
+                          "mode": "normal",
+                          "style": "",
+                          "text": "Snorkeling is also a popular activity in Vietnam, especially in Ha Long Bay. Here, visitors will experience viewing colorful marine creatures and underwater coral reefs. Boating is also an interesting activity that visitors can participate in when coming to Vietnam, with special experiences when rowing on the vast Mekong River in the South or joining the majestic Ma Pi Leng River. in the North.",
+                          "type": "text",
+                          "version": 1
+                        }
+                      ],
+                      "direction": "ltr",
+                      "format": "",
+                      "indent": 0,
+                      "type": "listitem",
+                      "version": 1,
+                      "value": 2
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "list",
+                  "version": 1,
+                  "listType": "bullet",
+                  "start": 1,
+                  "tag": "ul"
+                },
+                {
+                  "children": [],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1,
+                  "textFormat": 0
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "id": "66615f7045e81ced874d611f",
+        "blockName": "Underwater Activities",
+        "blockType": "RichText"
+      },
+      {
+        "media": "668d527ad18894a104f2d466",
+        "ratio": "16:9",
+        "isFullWidth": true,
+        "id": "668d590339b83e725846da64",
+        "blockType": "Media"
+      }
+    ],
+    "slug": "leo-nui",
+    "parent": "668d5bd371d9a9336407f259",
+    "attributes": [
+      "family_friendly",
+      "wheelchair_accessible",
+      "pet_friendly"
+    ],
+    "time": [
+      "january",
+      "april",
+      "may"
+    ],
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        108.212,
+        16.068
+      ]
+    },
+    "author": "664226c8eae77f259b417e70",
+    "path": "/experiences/leo-nui",
+    "meta": {},
+    "_status": "published",
+    "createdAt": {
+      "$date": "2024-06-03T06:35:53.966Z"
+    },
+    "updatedAt": {
+      "$date": "2024-07-25T14:50:59.589Z"
+    },
+    "__v": 0,
+    "difficulty": "moderate",
+    "description": {
+      "en": "-Adventure tourism in Vietnam offers visitors a variety of exciting activities, especially domestic activities. Here, visitors can enjoy unique experiences such as scuba diving, snorkeling and boating on Vietnam's beautiful waters. \nScuba diving is an activity not to be missed when coming to Vietnam, especially in beautiful spots like Hon Mun, Nha Trang and Phu Quoc. In these places, visitors can explore the underwater beauty with beautiful coral reefs and diverse marine life.\n-Snorkeling is also a popular activity in Vietnam, especially in Ha Long Bay. Here, visitors will experience viewing colorful marine creatures and underwater coral reefs. Boating is also an interesting activity that visitors can participate in when coming to Vietnam, with special experiences when rowing on the vast Mekong River in the South or joining the majestic Ma Pi Leng River. in the North."
+    },
+    "Attribute": {
+      "difficulty": "moderate",
+      "attributes": [
+        "family_friendly",
+        "pet_friendly",
+        "wheelchair_accessible"
+      ],
+      "time": [],
+      "location": {}
+    },
+    "Content": {
+      "title": {
+        "en": "Test experience"
+      },
+      "description": {
+        "en": "Test experience"
+      },
+      "banner": "6662a361ff64e42e4386f776",
+      "blocks": []
+    },
+    "System": {
+      "slug": "leo-nui",
+      "parent": "66535307b861234f1c08ba0b",
+      "author": "664226c8eae77f259b417e70",
+      "path": "/experiences/leo-nui"
+    },
+    "address": "Đà Nẵng, Vietnam",
+    "durationUnit": "hours",
+    "seasons": [
+      "winter",
+      "spring",
+      "summer"
+    ],
+    "accessibility": [],
+    "regions": "southern",
+    "themeAttribute": []
+  }

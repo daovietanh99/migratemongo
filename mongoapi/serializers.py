@@ -56,3 +56,51 @@ class DocumentSerializer(serializers.Serializer):
     _v = serializers.IntegerField(required=False, default=0)
     parent = serializers.CharField(required=False)
     meta = MetaSerializer(required=False)
+
+
+class LocationSerializer(serializers.Serializer):
+    type = serializers.CharField(required=False)
+    coordinates = serializers.ListSerializer(child=serializers.FloatField(), allow_empty=True, required=False)
+
+class AtrributeSerializer(serializers.Serializer):
+    difficulty = serializers.CharField(required=False)
+    attributes = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+    time = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+    location = LocationSerializer(required=False)
+    
+class ContentSerializer(serializers.Serializer):
+    title = MultilingualSerializer(required=False)
+    description = MultilingualSerializer(required=False)
+    blocks = RichTextBlockSerializer(required=False, many=True, allow_empty=True)      #modified
+    banner = serializers.CharField(required=False)  
+    
+class SystemSerializer(serializers.Serializer):
+    slug = serializers.CharField(required=False)
+    parent = serializers.CharField(required=False)
+    author = serializers.CharField(required=False)
+    path = serializers.CharField(required=False)
+
+class ExperienceSerializer(serializers.Serializer):
+    title = MultilingualSerializer(required=False)
+    description = MultilingualSerializer(required=False)
+    attributes = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+    banner = serializers.CharField(required=False)                 #modified
+    blocks = RichTextBlockSerializer(required=False, many=True, allow_empty=True)      #modified
+    slug = serializers.CharField(required=False)
+    author = serializers.CharField(required=False)
+    difficulty = serializers.CharField(required=False)
+    path = serializers.CharField(required=False)
+    _status = serializers.CharField(required=False)
+    time = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+    location = LocationSerializer(required=False)
+    createdAt = TimeSerializer(required=False) #modified
+    updatedAt = TimeSerializer(required=False) #modified
+    parent = serializers.CharField(required=False)
+    meta = MetaSerializer(required=False)
+    durationUnit = serializers.CharField(required=False)
+    address = serializers.CharField(required=False)
+    seasons = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+    regions = serializers.CharField(required=False)
+    Attribute = AtrributeSerializer(required=False)
+    Content = ContentSerializer(required=False)
+    System = SystemSerializer(required=False)

@@ -5,7 +5,7 @@ from django.conf import settings
 from rest_framework.decorators import action
 from bson.objectid import ObjectId
 from datetime import datetime
-from mongoapi.serializers import DocumentSerializer, MediaSerializer
+from mongoapi.serializers import DocumentSerializer, MediaSerializer, ExperienceSerializer
 from drf_spectacular.utils import extend_schema
 from PIL import Image
 import urllib
@@ -25,6 +25,7 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
 
     collection_source = client_source['iguide']["blogs"]
     collection_target = client_target['test']["blogs"]
+    collection_experience_target = client_target['test']["experiences"]
     collection_media_target = client_target['test']["media"]
     
     session = boto3.Session()
@@ -132,7 +133,7 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
     @action(methods=["POST"], detail=False, url_path="experience")
     def experience_create(self, request, *args, **kwargs):
         insert = True
-        data = DocumentSerializer(data=request.data)
+        data = ExperienceSerializer(data=request.data)
         data.is_valid(raise_exception=True)
         
         # data.validated_data["createdAt"]["$date"] = data.validated_data["createdAt"]["date"]
@@ -153,10 +154,8 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
                 blk["carousel"] = json.loads(blk["carousel"])
                 for img in blk["carousel"]:
                     img["media"] = self._insert_image(img["media"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
-        
-        data.validated_data["meta"]["image"]["en"] = self._insert_image(data.validated_data["meta"]["image"]["en"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
-        data.validated_data["meta"]["image"]["vi"] = self._insert_image(data.validated_data["meta"]["image"]["vi"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
-        data.validated_data["meta"]["image"]["ko"] = self._insert_image(data.validated_data["meta"]["image"]["ko"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
+
+        data.validated_data['Content']['blocks'] = data.validated_data["blocks"]
                 
         for blk in data.validated_data["blocks"]:
             if blk["blockType"] == "RichText":
@@ -168,11 +167,11 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
         
         # print(data.validated_data)
         
-        if self.collection_target.find_one({"slug": data.validated_data["slug"]}):
+        if self.collection_experience_target.find_one({"slug": data.validated_data["slug"]}):
             return Response(data={"message": "success", "result": {"data": data.validated_data}})
         
         if insert:
-            self.collection_target.insert_one(data.validated_data)
+            self.collection_experience_target.insert_one(data.validated_data)
 
         return Response(data={"message": "success", "result": {"data": request.data}})
 

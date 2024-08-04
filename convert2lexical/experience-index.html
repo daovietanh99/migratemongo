@@ -40,7 +40,7 @@
       registerDragonSupport(editor),
     );
 
-    fetch("http://localhost:8000/static/data.json")
+    fetch("http://localhost:8000/static/experience_data.json")
     .then(res => res.json())
     .then(res => {
       let check = false
@@ -51,168 +51,186 @@
 
         let document_ = {}
 
+        const time_mapping = [
+            "january", 
+            "febuary", 
+            "march", 
+            "april", 
+            "may", 
+            "june", 
+            "july", 
+            "august", 
+            "september", 
+            "october", 
+            "november", 
+            "december"
+        ]
+
         document_ = {
-          "banner": res[i]["image"],
-          "blocks": [],
           "title": {
-            "vi": res[i]['title_vi'],
-            "en": res[i]['title_en'],
-            "ko": res[i]['title_ko'],
+                "vi": typeof res[i]['title_vi'] === "string" ? res[i]['title_vi'] : res[i]['title_vi'][0],
+                "en": typeof res[i]['title_en'] === "string" ? res[i]['title_en'] : res[i]['title_en'][0],
+                "ko": typeof res[i]['title_ko'] === "string" ? res[i]['title_ko'] : res[i]['title_ko'][0],
           },
           "description": {
-            "en": res[i]["shortContent_en"],
-            "vi": res[i]["shortContent_vi"],
-            "ko": res[i]["shortContent_ko"],
+                "vi": "NEED TO FILL",
+                "en": "NEED TO FILL",
+                "ko": "NEED TO FILL",
           },
-          "path": "/" + res[i]["s3_folder_image"],
-          "createdAt": {
-            "date":  moment(parseInt(res[i]["create_at"]["$numberLong"])).toISOString() //"2024-06-06T04:22:55.236Z"
+          "attributes":  [
+                "family_friendly",
+                "wheelchair_accessible",
+                "pet_friendly"
+          ],
+          "blocks": [],
+          "banner": typeof res[i]['image'] === "string" ? res[i]['image'] : res[i]['image'][0],
+          "slug": res[i]['code'],
+          "parent": "668d5bd371d9a9336407f259",
+          "author": "664226c8eae77f259b417e70",
+          "path": "/experiences/" + res[i]['code'],
+          "_status": "published",
+          "difficulty": "moderate",
+          "time": [],
+          "location": {
+                "type": "Point",
+                "coordinates": [
+                    res[i]['detail']['location'][0]['long'],
+                    res[i]['detail']['location'][0]['lat']
+                ]
           },
-          "updatedAt": {
-            "date": moment(parseInt(res[i]["create_at"]["$numberLong"])).toISOString()
+          "Attribute": {
+            "difficulty": "moderate",
+            "attributes":  [
+                "family_friendly",
+                "wheelchair_accessible",
+                "pet_friendly"
+            ],
+            "time": [],
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    res[i]['detail']['location'][0]['long'],
+                    res[i]['detail']['location'][0]['lat']
+                ]
+            }
           },
-          "meta": {
-            // "attributes": res[i]["attributes"],
+          "Content": {
             "title": {
-              "vi": res[i]['title_vi'],
-              "en": res[i]['title_en'],
-              "ko": res[i]['title_ko'],
+                "vi": typeof res[i]['title_vi'] === "string" ? res[i]['title_vi'] : res[i]['title_vi'][0],
+                "en": typeof res[i]['title_en'] === "string" ? res[i]['title_en'] : res[i]['title_en'][0],
+                "ko": typeof res[i]['title_ko'] === "string" ? res[i]['title_ko'] : res[i]['title_ko'][0],
             },
             "description": {
-              "en": res[i]["shortContent_en"],
-              "vi": res[i]["shortContent_vi"],
-              "ko": res[i]["shortContent_ko"],
+                "vi": "NEED TO FILL",
+                "en": "NEED TO FILL",
+                "ko": "NEED TO FILL",
             },
-            "image": {
-              "en": res[i]["image"],
-              "vi": res[i]["image"],
-              "ko": res[i]["image"]
-            },
-            // "isApproveText": res[i]["isApproveText"],
-            // "isFinalCheckOnWeb": res[i]["isFinalCheckOnWeb"],
-            // "deploy": res[i]["deploy"],
-            // "isHighlight": res[i]["isHighlight"],
-            // "isApproveImage": res[i]["isApproveImage"],
+            "banner": typeof res[i]['image'] === "string" ? res[i]['image'] : res[i]['image'][0],
+            "blocks": []
           },
-          "slug": res[i]["code"],
-          "category": "NEED TO CHANGE",
-          "author": "664226c8eae77f259b417e70",
-          "__v": 0,
-          "parent": "665d61377dc25580f61aa49e",
-          "_status": "published",
+          "System": {
+            "slug": res[i]['code'],
+            "parent": "66535307b861234f1c08ba0b",
+            "author": "664226c8eae77f259b417e70",
+            "path": "/experiences/" + res[i]['code'],
+          },
+          "durationUnit": "hours",
+          "address": "Đà nẵng, VN",
+          "createdAt": {
+            "date":  moment(parseInt(res[i]["update_at"]["$numberLong"])).toISOString() //"2024-06-06T04:22:55.236Z"
+          },
+          "updatedAt": {
+            "date": moment(parseInt(res[i]["update_at"]["$numberLong"])).toISOString()
+          },
+          "seasons": [
+            "winter",
+            "spring",
+            "summer"
+          ],
+          "accessibility": [],
+          "regions": "southern",
+          "themeAttribute": []
         }
 
-        for (let j = 0; j < res[i]['blocks'].length; j = j+1) {
+        for (let t of res[i]['detail']['information']['when']) {
+            document_["time"].push(time_mapping[t])
+            document_["Attribute"]["time"].push(time_mapping[t])
+        }
 
-          let block = {}
+        let block = {}
 
-          while (check && j != 0 && res[i]['blocks'][j-1]['type'] === "text") {}
-
-          if (res[i]['blocks'][j]['type'] === "text"){
-
+        for (let image of res[i]['detail']['image']) {
             block = {
-              "content": {},
-              "blockType": "RichText"
-            }
-            
-            for (let content_type of [['content_vi', 'vi'], ['content_en', 'en'], ['content_ko', 'ko']]) {
-
-              while (check) {}
-              editor.update(() => {
-                check = true
-                lexical.$getRoot().clear();
-                var parser = new DOMParser();
-                var dom = parser.parseFromString(res[i]['blocks'][j][content_type[0]], "text/html");
-                var nodes = html.$generateNodesFromDOM(editor, dom)
-                lexical.$getRoot().select();
-                const _selection = lexical.$getSelection();
-                _selection.insertNodes(nodes);
-              }, {discrete: true, onUpdate: () => {  
-                block["content"][content_type[1]] = editor.getEditorState().exportJSON()
-                check = false
-              }});
-
-            }
-
-            block["content"] = JSON.stringify(block["content"])
-
-            document_["blocks"].push(block)
-
-          } else if (res[i]['blocks'][j]['type'] === "image") {
-            
-            block = {
-              "media": res[i]['blocks'][j]['images'][0]['src'],
+              "media": image,
               "ratio": "16:9",
               "isFullWidth": false,
               "blockType": "Media"
             }
-
             document_["blocks"].push(block)
+        }
 
-          } else if (res[i]['blocks'][j]['type'] === "slide") {
-            
-            block = {
-              "carousel": [],
-              "autoplaySpeed": 5000,
-              "ratio": "16:9",
-              "isFullWidth": false,
-              "blockType": "Carousel"
-            }
+        block = {
+            "content": {},
+            "blockType": "RichText"
+        }
+        
+        for (let content_type of [['content_vi', 'vi'], ['content_en', 'en'], ['content_ko', 'ko']]) {
 
-            for (let img of res[i]['blocks'][j]['images']) {
-              block['carousel'].push({"media": img['src']})
-            }
-
-            block['carousel'] = JSON.stringify(block['carousel'])
-            document_["blocks"].push(block)
-
-          } else if (res[i]['blocks'][j]['type'] === "image_link") {
-            
-            block = {
-              "media": res[i]['blocks'][j]['images'][0]['src'],
-              "ratio": "16:9",
-              "isFullWidth": false,
-              "blockType": "Media"
-            }
-
-            document_["blocks"].push(block)
-
-            //
-
-            block = {
-              "content": {},
-              "blockType": "RichText"
-            }
-            
-            for (let content_type of [['content_vi', 'vi'], ['content_en', 'en'], ['content_ko', 'ko']]) {
-
-              while (check) {}
-              editor.update(() => {
+            while (check && content_type[0] !== 'content_vi') {}
+            editor.update(() => {
                 check = true
                 lexical.$getRoot().clear();
                 var parser = new DOMParser();
-                var dom = parser.parseFromString(res[i]['blocks'][j][content_type[0]], "text/html");
+                var dom = parser.parseFromString(res[i]['detail'][content_type[0]], "text/html");
                 var nodes = html.$generateNodesFromDOM(editor, dom)
                 lexical.$getRoot().select();
                 const _selection = lexical.$getSelection();
                 _selection.insertNodes(nodes);
-              }, {discrete: true, onUpdate: () => {  
+            }, {discrete: true, onUpdate: () => {  
                 block["content"][content_type[1]] = editor.getEditorState().exportJSON()
                 check = false
-              }});
-
-            }
-
-            block["content"] = JSON.stringify(block["content"])
-
-            document_["blocks"].push(block)
-
-          }
+            }});
 
         }
+
+        block["content"] = JSON.stringify(block["content"])
+
+        document_["blocks"].push(block)
+
+
+
+        block = {
+            "content": {},
+            "blockType": "RichText"
+        }
+
+        for (let content_type of [['tips_vi', 'vi'], ['tips_en', 'en'], ['tips_ko', 'ko']]) {
+
+            while (check && content_type[0] !== 'tips_vi') {}
+            editor.update(() => {
+                check = true
+                lexical.$getRoot().clear();
+                var parser = new DOMParser();
+                var dom = parser.parseFromString(res[i]['detail'][content_type[0]].join("<br/>"), "text/html");
+                var nodes = html.$generateNodesFromDOM(editor, dom)
+                lexical.$getRoot().select();
+                const _selection = lexical.$getSelection();
+                _selection.insertNodes(nodes);
+            }, {discrete: true, onUpdate: () => {  
+                block["content"][content_type[1]] = editor.getEditorState().exportJSON()
+                check = false
+            }});
+
+        }
+
+        block["content"] = JSON.stringify(block["content"])
+
+        document_["blocks"].push(block)
+
+
         console.log("CONVERTTTTTTTT DOCUMENT", i, document_)
 
-        fetch("/api/mongo/", {
+        fetch("/api/mongo/experience/", {
           method: "POST",
           headers: {'content-type': 'application/json'},
           body: JSON.stringify(document_)
