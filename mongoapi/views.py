@@ -155,7 +155,7 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
                 for img in blk["carousel"]:
                     img["media"] = self._insert_image(img["media"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
 
-        data.validated_data['Content']['blocks'] = data.validated_data["blocks"]
+        data.validated_data['Content']['blocks'] = []
         data.validated_data['Content']['banner'] = data.validated_data["banner"]
                 
         for blk in data.validated_data["blocks"]:
