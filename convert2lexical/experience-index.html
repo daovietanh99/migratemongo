@@ -1,0 +1,229 @@
+<html>
+<body>
+  <!-- Include Lexical via CDN -->
+  <script src="lexical.js"></script>
+  <script src="lexical.selection.js"></script>
+  <script src="lexical.utils.js"></script>
+  <script src="lexical.html.js"></script>
+  <script src="lexical.clipboard.js"></script>
+  <script src="lexical.richtext.js"></script>
+  <script src="lexical.dragon.js"></script>
+  <script src="moment.js"></script>
+  <script src="index.js"></script>
+  <div id="editor" contenteditable="true"></div>
+  <h4>Editor state:</h4>
+  <textarea id="lexical-state" style="width: 100%; height:70vh"></textarea>
+  <script >
+    const stateRef = document.getElementById(
+        'lexical-state',
+      )
+    const initialConfig = {
+      namespace: 'Vanilla JS Demo',
+      // Register nodes specific for @lexical/rich-text
+      nodes: [HeadingNode, QuoteNode],
+      onError: (error) => {
+        throw error;
+      },
+      theme: {
+        // Adding styling to Quote node, see styles.css
+        quote: 'PlaygroundEditorTheme__quote',
+      },
+    };
+    // Create an editor instance
+    const editor = lexical.createEditor(initialConfig);
+    // Set the root element (where you want to edit content)
+    const contentEditableElement = document.getElementById('editor');
+    editor.setRootElement(contentEditableElement);
+
+    mergeRegister(
+      registerRichText(editor),
+      registerDragonSupport(editor),
+    );
+
+    fetch("http://localhost:8000/static/data.json")
+    .then(res => res.json())
+    .then(res => {
+      let check = false
+      console.log("DOCUMENTs", res)
+
+      for (let i = 0; i < res.length; i = i+1) {
+        stateRef.value = JSON.stringify(res[i])
+
+        let document_ = {}
+
+        document_ = {
+          "banner": res[i]["image"],
+          "blocks": [],
+          "title": {
+            "vi": res[i]['title_vi'],
+            "en": res[i]['title_en'],
+            "ko": res[i]['title_ko'],
+          },
+          "description": {
+            "en": res[i]["shortContent_en"],
+            "vi": res[i]["shortContent_vi"],
+            "ko": res[i]["shortContent_ko"],
+          },
+          "path": "/" + res[i]["s3_folder_image"],
+          "createdAt": {
+            "date":  moment(parseInt(res[i]["create_at"]["$numberLong"])).toISOString() //"2024-06-06T04:22:55.236Z"
+          },
+          "updatedAt": {
+            "date": moment(parseInt(res[i]["create_at"]["$numberLong"])).toISOString()
+          },
+          "meta": {
+            // "attributes": res[i]["attributes"],
+            "title": {
+              "vi": res[i]['title_vi'],
+              "en": res[i]['title_en'],
+              "ko": res[i]['title_ko'],
+            },
+            "description": {
+              "en": res[i]["shortContent_en"],
+              "vi": res[i]["shortContent_vi"],
+              "ko": res[i]["shortContent_ko"],
+            },
+            "image": {
+              "en": res[i]["image"],
+              "vi": res[i]["image"],
+              "ko": res[i]["image"]
+            },
+            // "isApproveText": res[i]["isApproveText"],
+            // "isFinalCheckOnWeb": res[i]["isFinalCheckOnWeb"],
+            // "deploy": res[i]["deploy"],
+            // "isHighlight": res[i]["isHighlight"],
+            // "isApproveImage": res[i]["isApproveImage"],
+          },
+          "slug": res[i]["code"],
+          "category": "NEED TO CHANGE",
+          "author": "664226c8eae77f259b417e70",
+          "__v": 0,
+          "parent": "665d61377dc25580f61aa49e",
+          "_status": "published",
+        }
+
+        for (let j = 0; j < res[i]['blocks'].length; j = j+1) {
+
+          let block = {}
+
+          while (check && j != 0 && res[i]['blocks'][j-1]['type'] === "text") {}
+
+          if (res[i]['blocks'][j]['type'] === "text"){
+
+            block = {
+              "content": {},
+              "blockType": "RichText"
+            }
+            
+            for (let content_type of [['content_vi', 'vi'], ['content_en', 'en'], ['content_ko', 'ko']]) {
+
+              while (check) {}
+              editor.update(() => {
+                check = true
+                lexical.$getRoot().clear();
+                var parser = new DOMParser();
+                var dom = parser.parseFromString(res[i]['blocks'][j][content_type[0]], "text/html");
+                var nodes = html.$generateNodesFromDOM(editor, dom)
+                lexical.$getRoot().select();
+                const _selection = lexical.$getSelection();
+                _selection.insertNodes(nodes);
+              }, {discrete: true, onUpdate: () => {  
+                block["content"][content_type[1]] = editor.getEditorState().exportJSON()
+                check = false
+              }});
+
+            }
+
+            block["content"] = JSON.stringify(block["content"])
+
+            document_["blocks"].push(block)
+
+          } else if (res[i]['blocks'][j]['type'] === "image") {
+            
+            block = {
+              "media": res[i]['blocks'][j]['images'][0]['src'],
+              "ratio": "16:9",
+              "isFullWidth": false,
+              "blockType": "Media"
+            }
+
+            document_["blocks"].push(block)
+
+          } else if (res[i]['blocks'][j]['type'] === "slide") {
+            
+            block = {
+              "carousel": [],
+              "autoplaySpeed": 5000,
+              "ratio": "16:9",
+              "isFullWidth": false,
+              "blockType": "Carousel"
+            }
+
+            for (let img of res[i]['blocks'][j]['images']) {
+              block['carousel'].push({"media": img['src']})
+            }
+
+            block['carousel'] = JSON.stringify(block['carousel'])
+            document_["blocks"].push(block)
+
+          } else if (res[i]['blocks'][j]['type'] === "image_link") {
+            
+            block = {
+              "media": res[i]['blocks'][j]['images'][0]['src'],
+              "ratio": "16:9",
+              "isFullWidth": false,
+              "blockType": "Media"
+            }
+
+            document_["blocks"].push(block)
+
+            //
+
+            block = {
+              "content": {},
+              "blockType": "RichText"
+            }
+            
+            for (let content_type of [['content_vi', 'vi'], ['content_en', 'en'], ['content_ko', 'ko']]) {
+
+              while (check) {}
+              editor.update(() => {
+                check = true
+                lexical.$getRoot().clear();
+                var parser = new DOMParser();
+                var dom = parser.parseFromString(res[i]['blocks'][j][content_type[0]], "text/html");
+                var nodes = html.$generateNodesFromDOM(editor, dom)
+                lexical.$getRoot().select();
+                const _selection = lexical.$getSelection();
+                _selection.insertNodes(nodes);
+              }, {discrete: true, onUpdate: () => {  
+                block["content"][content_type[1]] = editor.getEditorState().exportJSON()
+                check = false
+              }});
+
+            }
+
+            block["content"] = JSON.stringify(block["content"])
+
+            document_["blocks"].push(block)
+
+          }
+
+        }
+        console.log("CONVERTTTTTTTT DOCUMENT", i, document_)
+
+        fetch("/api/mongo/", {
+          method: "POST",
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify(document_)
+        }).then(res => res.json())
+        .then(res => {
+          console.log(i, res)
+        })
+      }
+    })
+
+  </script>
+  <!-- Your content editable element -->
+</body>
+</html>

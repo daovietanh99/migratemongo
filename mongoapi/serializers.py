@@ -29,14 +29,17 @@ class TimeSerializer(serializers.Serializer):
     date = serializers.CharField(required=False)
     
 class MediaSerializer(serializers.Serializer):
-  alt = serializers.CharField(required=False)
-  prefix = serializers.CharField(required=False, default="dev/media")
-  filename = serializers.CharField(required=False)
-  mimeType =  serializers.CharField(required=False, default="image/jpeg")
-  filesize = serializers.IntegerField(required=False)
-  width = serializers.IntegerField(required=False)
-  height = serializers.IntegerField(required=False)
-  _v = serializers.IntegerField(required=False, default=0)
+    id = serializers.CharField(required=False)
+    alt = serializers.CharField(required=False)
+    prefix = serializers.CharField(required=False, default="dev/media")
+    filename = serializers.CharField(required=False)
+    mimeType =  serializers.CharField(required=False, default="image/jpeg")
+    filesize = serializers.IntegerField(required=False)
+    width = serializers.IntegerField(required=False)
+    height = serializers.IntegerField(required=False)
+    focalX = serializers.IntegerField(required=False)
+    focalY = serializers.IntegerField(required=False)
+    url = serializers.CharField(required=False)
 
 class DocumentSerializer(serializers.Serializer):
     title = MultilingualSerializer(required=False)
