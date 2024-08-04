@@ -11,12 +11,13 @@ from PIL import Image
 import urllib
 import io
 import json
+import boto3
 
 
 class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     
-    source_string = 'mongodb://iguide:iguide_123456@54.254.236.140/iguide' 
-    target_string = 'mongodb+srv://admin:Y3sLjnTUjv@cms-dev.8prvnv1.mongodb.net/test?retryWrites=true&w=majority&appName=cms-dev'
+    source_string = settings.MONGO_SOURCE_URL
+    target_string = settings.MONGO_TARGET_URL
     
     client_source = pymongo.MongoClient(source_string)
     client_target = pymongo.MongoClient(target_string)
@@ -24,6 +25,16 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
     collection_source = client_source['iguide']["blogs"]
     collection_target = client_target['test']["blogs"]
     collection_media_target = client_target['test']["media"]
+    
+    session = boto3.Session()
+    
+    s3_client = session.client(
+        service_name='s3',
+        region_name=settings.S3_REGION,
+        aws_access_key_id = settings.S3_ACCESS_KEY_ID,
+        aws_secret_access_key = settings.S3_SECRET_ACCESS_KEY,
+        endpoint_url=settings.S3_ENDPOINT,
+    )
 
     def list(self, request, *args, **kwargs):
         ids = self.collection_source.count_documents(filter={})
@@ -41,9 +52,6 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
     def _insert_image(self, url, create, update, insert:bool=True, verbose:bool=False):
         image_obj = self.collection_media_target.find_one({"filename": url.split("/")[-1]})
         
-        if image_obj:
-            return str(image_obj["_id"])
-        
         fd = urllib.request.urlopen( urllib.parse.quote(url, safe=':/', encoding=None, errors=None) )
         image_file = io.BytesIO(fd.read())
         img = Image.open(image_file)
@@ -57,11 +65,20 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
             "updatedAt": update
         })
         img_serializer.is_valid(raise_exception=True)
+
         if verbose:
             print(img_serializer.validated_data)
+
+        if insert:
+            self.s3_client.upload_fileobj(image_file, settings.S3_BUCKET, img_serializer.validated_data["filename"])
+            
+        if image_obj:
+            return str(image_obj["_id"])
+
         img_obj = "Test"
         if insert:
             img_obj = str(self.collection_media_target.insert_one(img_serializer.validated_data).inserted_id)
+
         return img_obj
 
     @extend_schema(request=DocumentSerializer)

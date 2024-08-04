@@ -1,8 +1,10 @@
 django
 djangorestframework
 django-filters
+django-environ
 drf-spectacular
 drf-spectacular-sidecar
 urllib
 pymongo
 Pillow
+boto3

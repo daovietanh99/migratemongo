@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -27,6 +31,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MONGO_SOURCE_URL = os.environ.get("MONGO_SOURCE_URL", None)
+MONGO_TARGET_URL = os.environ.get("MONGO_TARGET_URL", None)
+S3_ACCESS_KEY_ID = os.environ.get("S3_ACCESS_KEY_ID", None)
+S3_SECRET_ACCESS_KEY = os.environ.get("S3_SECRET_ACCESS_KEY", None)
+S3_REGION = os.environ.get("S3_REGION", None)
+S3_BUCKET = os.environ.get("S3_BUCKET", None)
+S3_ENDPOINT = os.environ.get("S3_ENDPOINT", None)
+
+print(MONGO_SOURCE_URL)
 
 # Application definition
 
