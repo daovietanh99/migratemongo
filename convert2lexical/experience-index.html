@@ -13,6 +13,7 @@
   <div id="editor" contenteditable="true"></div>
   <h4>Editor state:</h4>
   <textarea id="lexical-state" style="width: 100%; height:70vh"></textarea>
+  <button onclick="start()">Tiến Hành</button>
   <script >
     const stateRef = document.getElementById(
         'lexical-state',
@@ -40,6 +41,8 @@
       registerDragonSupport(editor),
     );
 
+
+    function start() {
     fetch("http://localhost:8000/static/experience_data.json")
     .then(res => res.json())
     .then(res => {
@@ -240,6 +243,7 @@
         })
       }
     })
+    }
 
   </script>
   <!-- Your content editable element -->
