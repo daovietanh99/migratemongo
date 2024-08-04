@@ -97,8 +97,8 @@
           "location": {
                 "type": "Point",
                 "coordinates": [
-                    res[i]['detail']['location'][0]['long'],
-                    res[i]['detail']['location'][0]['lat']
+                    res[i]['detail']['location'] ? res[i]['detail']['location'][0]['long'] : res[i]['detail']['location_vi'][0]['long'],
+                    res[i]['detail']['location'] ? res[i]['detail']['location'][0]['lat'] : res[i]['detail']['location_vi'][0]['lat'],
                 ]
           },
           "Attribute": {
@@ -112,8 +112,8 @@
             "location": {
                 "type": "Point",
                 "coordinates": [
-                    res[i]['detail']['location'][0]['long'],
-                    res[i]['detail']['location'][0]['lat']
+                    res[i]['detail']['location'] ? res[i]['detail']['location'][0]['long'] : res[i]['detail']['location_vi'][0]['long'],
+                    res[i]['detail']['location'] ? res[i]['detail']['location'][0]['lat'] : res[i]['detail']['location_vi'][0]['lat'],
                 ]
             }
           },
