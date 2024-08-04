@@ -88,6 +88,10 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
                 blk["carousel"] = json.loads(blk["carousel"])
                 for img in blk["carousel"]:
                     img["media"] = self._insert_image(img["media"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
+        
+        data.validated_data["meta"]["image"]["en"] = self._insert_image(data.validated_data["meta"]["image"]["en"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
+        data.validated_data["meta"]["image"]["vi"] = self._insert_image(data.validated_data["meta"]["image"]["vi"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
+        data.validated_data["meta"]["image"]["ko"] = self._insert_image(data.validated_data["meta"]["image"]["ko"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
                 
         for blk in data.validated_data["blocks"]:
             if blk["blockType"] == "RichText":

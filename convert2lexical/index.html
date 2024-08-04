@@ -64,7 +64,7 @@
             "vi": res[i]["shortContent_vi"],
             "ko": res[i]["shortContent_ko"],
           },
-          "path": res[i]["s3_folder_image"],
+          "path": "/" + res[i]["s3_folder_image"],
           "createdAt": {
             "date":  moment(parseInt(res[i]["create_at"]["$numberLong"])).toISOString() //"2024-06-06T04:22:55.236Z"
           },
@@ -95,10 +95,10 @@
             "isApproveImage": res[i]["isApproveImage"],
           },
           "slug": res[i]["code"],
-          "category": "no_data",
-          "author": "no_data",
+          "category": "NEED TO CHANGE",
+          "author": "664226c8eae77f259b417e70",
           "__v": 0,
-          "parent": "no_data",
+          "parent": "NEED TO CHANGE",
           "_status": "published",
         }
 
