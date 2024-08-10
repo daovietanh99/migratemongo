@@ -145,6 +145,8 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
 
         data.validated_data["banner"] = self._insert_image(data.validated_data["banner"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
         
+        data.validated_data['highlight'] = json.loads(data.validated_data['highlight'])
+        
         for blk in data.validated_data["blocks"]:
             if blk["blockType"] == "RichText":
                 blk['content'] = json.loads(blk['content'])

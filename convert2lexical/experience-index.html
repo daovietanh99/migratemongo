@@ -137,7 +137,8 @@
             "author": "664226c8eae77f259b417e70",
             "path": "/experiences/" + res[i]['code'],
           },
-          "durationUnit": "hours",
+          "durationUnit": "minutes",
+          "duration": res[i]['detail']['information']['duration'],
           "address": "Đà nẵng, VN",
           "createdAt": {
             "date":  moment(parseInt(res[i]["update_at"]["$numberLong"])).toISOString() //"2024-06-06T04:22:55.236Z"
@@ -145,14 +146,11 @@
           "updatedAt": {
             "date": moment(parseInt(res[i]["update_at"]["$numberLong"])).toISOString()
           },
-          "seasons": [
-            "winter",
-            "spring",
-            "summer"
-          ],
+          "seasons": [],
           "accessibility": [],
           "regions": "southern",
-          "themeAttribute": []
+          "themeAttribute": [],
+          "additionalInformation": null
         }
 
         for (let t of res[i]['detail']['information']['when']) {
@@ -160,17 +158,38 @@
             document_["Attribute"]["time"].push(time_mapping[t])
         }
 
+        for (let t of res[i]['detail']['information']['when']) {
+            if (t >= 0 && t <= 2 && !document_["seasons"].includes("spring")) {
+              document_["seasons"].push("spring")
+            }
+            if (t >= 3 && t <= 5 && !document_["seasons"].includes("summer")) {
+              document_["seasons"].push("summer")
+            }
+            if (t >= 6 && t <= 8 && !document_["seasons"].includes("autumn")) {
+              document_["seasons"].push("autumn")
+            }
+            if (t >= 9 && t <= 11 && !document_["seasons"].includes("winter")) {
+              document_["seasons"].push("winter")
+            }
+        }
+
         let block = {}
 
-        for (let image of res[i]['detail']['image']) {
-            block = {
-              "media": image,
-              "ratio": "16:9",
-              "isFullWidth": false,
-              "blockType": "Media"
-            }
-            document_["blocks"].push(block)
+        block = {
+          "carousel": [],
+          "autoplaySpeed": 5000,
+          "ratio": "16:9",
+          "isFullWidth": false,
+          "blockType": "Carousel"
         }
+
+        for (let image of res[i]['detail']['image']) {
+          block['carousel'].push({"media": image})
+        }
+
+        block['carousel'] = JSON.stringify(block['carousel'])
+
+        document_["blocks"].push(block)
 
         block = {
             "content": {},
@@ -226,10 +245,7 @@
 
         }
 
-        block["content"] = JSON.stringify(block["content"])
-
-        document_["blocks"].push(block)
-
+        document_["highlight"] = JSON.stringify(block["content"])
 
         console.log("CONVERTTTTTTTT DOCUMENT", i, document_)
 
