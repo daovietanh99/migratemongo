@@ -176,6 +176,21 @@
         let block = {}
 
         block = {
+          "type": "three-images-as-banner",
+          "title": {
+            "vi": "NEED TO CHANGE",
+            "en": "NEED TO CHANGE",
+            "ko": "NEED TO CHANGE"
+          },
+          "description": {
+            "vi": "NEED TO CHANGE",
+            "en": "NEED TO CHANGE",
+            "ko": "NEED TO CHANGE"
+          },
+          "link": {
+            "type": "reference",
+            "appearance": "primary"
+          },
           "carousel": [],
           "autoplaySpeed": 5000,
           "ratio": "16:9",
@@ -187,13 +202,113 @@
           block['carousel'].push({"media": image})
         }
 
+        if (block['carousel'].length < 3) {
+          for (let i = 0; i < 3 - block['carousel'].length; i++) {
+            block['carousel'].push({"media": res[i]['detail']['image'][0]})
+          }
+        }
+
         block['carousel'] = JSON.stringify(block['carousel'])
 
         document_["blocks"].push(block)
 
         block = {
-            "content": {},
-            "blockType": "RichText"
+            "column1": {},
+            "column2": {
+              "en": {
+                "root": {
+                  "children": [
+                    {
+                      "children": [],
+                      "direction": null,
+                      "format": "",
+                      "indent": 0,
+                      "type": "paragraph",
+                      "version": 1,
+                      "textFormat": 0
+                    },
+                    {
+                      "format": "",
+                      "type": "block",
+                      "version": 2,
+                      "fields": {
+                        "doc": "",
+                        "blockName": "",
+                        "blockType": "GoodToKnow"
+                      }
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "root",
+                  "version": 1
+                }
+              },
+              "vi": {
+                "root": {
+                  "children": [
+                    {
+                      "children": [],
+                      "direction": null,
+                      "format": "",
+                      "indent": 0,
+                      "type": "paragraph",
+                      "version": 1,
+                      "textFormat": 0
+                    },
+                    {
+                      "format": "",
+                      "type": "block",
+                      "version": 2,
+                      "fields": {
+                        "doc": "",
+                        "blockName": "",
+                        "blockType": "GoodToKnow"
+                      }
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "root",
+                  "version": 1
+                }
+              },
+              "ko": {
+                "root": {
+                  "children": [
+                    {
+                      "children": [],
+                      "direction": null,
+                      "format": "",
+                      "indent": 0,
+                      "type": "paragraph",
+                      "version": 1,
+                      "textFormat": 0
+                    },
+                    {
+                      "format": "",
+                      "type": "block",
+                      "version": 2,
+                      "fields": {
+                        "doc": "",
+                        "blockName": "",
+                        "blockType": "GoodToKnow"
+                      }
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "root",
+                  "version": 1
+                }
+              }
+            },
+            "isFullWidth": false,
+            "type": "bigSmall",
+            "blockType": "OneOneLayout"
         }
         
         for (let content_type of [['content_vi', 'vi'], ['content_en', 'en'], ['content_ko', 'ko']]) {
@@ -209,13 +324,15 @@
                 const _selection = lexical.$getSelection();
                 _selection.insertNodes(nodes);
             }, {discrete: true, onUpdate: () => {  
-                block["content"][content_type[1]] = editor.getEditorState().exportJSON()
+                block["column1"][content_type[1]] = editor.getEditorState().exportJSON()
                 check = false
             }});
 
         }
 
-        block["content"] = JSON.stringify(block["content"])
+        block["column1"] = JSON.stringify(block["column1"])
+
+        block["column2"] = JSON.stringify(block["column2"])
 
         document_["blocks"].push(block)
 

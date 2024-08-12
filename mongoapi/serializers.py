@@ -4,11 +4,21 @@ class MultilingualSerializer(serializers.Serializer):
     en = serializers.CharField(required=False)
     vi = serializers.CharField(required=False)
     ko = serializers.CharField(required=False)
+    
+class LinkSerializer(serializers.Serializer):
+    type = serializers.CharField(required=False)
+    appearence = serializers.CharField(required=False)
 
 class RichTextBlockSerializer(serializers.Serializer):
     content = serializers.CharField(required=False) #modified
     carousel = serializers.CharField(required=False) #modified
     media = serializers.CharField(required=False)    #modified
+    column1 = serializers.CharField(required=False) #modified
+    column2 = serializers.CharField(required=False) #modified
+    title = MultilingualSerializer(required=False)
+    description = MultilingualSerializer(required=False)
+    link = LinkSerializer(required=False)
+    type = serializers.CharField(required=False)
     blockType = serializers.CharField(required=False)
     autoplay = serializers.BooleanField(required=False)
     autoplaySpeed = serializers.IntegerField(required=False)

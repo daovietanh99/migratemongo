@@ -150,6 +150,9 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
         for blk in data.validated_data["blocks"]:
             if blk["blockType"] == "RichText":
                 blk['content'] = json.loads(blk['content'])
+            if blk["blockType"] == "OneOneLayout":
+                blk['column1'] = json.loads(blk['column1'])
+                blk['column2'] = json.loads(blk['column2'])
             elif blk["blockType"] == "Media":
                 blk["media"] = self._insert_image(blk["media"], data.validated_data["createdAt"], data.validated_data["updatedAt"], insert, True)
             elif blk["blockType"] == "Carousel":
@@ -174,7 +177,20 @@ class MongoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
             return Response(data={"message": "success", "result": {"data": data.validated_data}})
         
         if insert:
-            self.collection_experience_target.insert_one(data.validated_data)
+            instance = self.collection_experience_target.insert_one(data.validated_data)
+            # data.validated_data["blocks"][1]["column2"]["en"]["root"]["children"][1]["fields"]["doc"] = instance.inserted_id
+            # data.validated_data["blocks"][1]["column2"]["vi"]["root"]["children"][1]["fields"]["doc"] = instance.inserted_id
+            # data.validated_data["blocks"][1]["column2"]["ko"]["root"]["children"][1]["fields"]["doc"] = instance.inserted_id
+            
+            self.collection_experience_target.update_one({
+            '_id': instance.inserted_id
+            },{
+            '$set': {
+                'blocks.1.column2.en.root.children.1.fields.doc': str(instance.inserted_id),
+                'blocks.1.column2.vi.root.children.1.fields.doc': str(instance.inserted_id),
+                'blocks.1.column2.ko.root.children.1.fields.doc': str(instance.inserted_id)
+            }
+            }, upsert=False)
 
         return Response(data={"message": "success", "result": {"data": request.data}})
 
