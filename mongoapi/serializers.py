@@ -7,7 +7,7 @@ class MultilingualSerializer(serializers.Serializer):
     
 class LinkSerializer(serializers.Serializer):
     type = serializers.CharField(required=False)
-    appearence = serializers.CharField(required=False)
+    appearance = serializers.CharField(required=False)
 
 class RichTextBlockSerializer(serializers.Serializer):
     content = serializers.CharField(required=False) #modified
